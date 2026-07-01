@@ -6,19 +6,36 @@ const Quiz = () => {
 	const [quizState, dispatch] = useContext(QuizContext);
 	return (
 		<div className='quiz'>
-			<div>
-				<div className='score'>
-					Question {quizState.currentQuestionIndex + 1}/
-					{quizState.questions.length}
+			{quizState.showResults && (
+				<div className='results'>
+					<div className='congratulations'>Congratulations</div>
+					<div className='results-info'>
+						<div>You have completed the quiz.</div>
+						<div>You've got 4 of {quizState.questions.length}.</div>
+					</div>
+					<div
+						className='next-button'
+						onClick={() => dispatch({ type: 'RESTART' })}
+					>
+						Restart
+					</div>
 				</div>
-				<Question />
-				<div
-					className='next-button'
-					onClick={() => dispatch({ type: 'NEXT_QUESTION' })}
-				>
-					NEXT QUESTION
+			)}
+			{!quizState.showResults && (
+				<div>
+					<div className='score'>
+						Question {quizState.currentQuestionIndex + 1}/
+						{quizState.questions.length}
+					</div>
+					<Question />
+					<div
+						className='next-button'
+						onClick={() => dispatch({ type: 'NEXT_QUESTION' })}
+					>
+						NEXT QUESTION
+					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	);
 };
