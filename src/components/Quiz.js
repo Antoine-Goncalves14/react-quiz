@@ -8,18 +8,29 @@ const Quiz = () => {
 		'https://opentdb.com/api.php?amount=10&category=21&difficulty=easy&type=multiple&encode=url3986';
 
 	useEffect(() => {
-		if (quizState.questions.length > 0) {
+		if (quizState.questions.length > 0 || quizState.error) {
 			return;
 		}
 		fetch(apiURL)
 			.then((res) => res.json())
 			.then((data) => {
 				dispatch({ type: 'LOADED_QUESTIONS', payload: data.results });
+			})
+			.catch((err) => {
+				dispatch({ type: 'SERVER_ERROR', payload: err.message });
 			});
 	});
 
 	return (
 		<div className='quiz'>
+			{quizState.error && (
+				<div className='results'>
+					<div className='congratulations'>Server error</div>
+					<div className='results-info'>
+						<div>{quizState.error}</div>
+					</div>
+				</div>
+			)}
 			{quizState.showResults && (
 				<div className='results'>
 					<div className='congratulations'>Congratulations</div>
